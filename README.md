@@ -26,7 +26,7 @@ trained, the player predicts the expected return on the set of all possible acti
 maximizes its return.  Equivalently, the player approximates a function from a set of features, generated from a 
 combination of a game state and an action, to its change in stack size.  This function is approximated using a 
 machine learning regressor.  I have chosen a Random Forest because of its robustness to noise (tendency not to 
-overfit) and speed in training.  A Support Vector Machine was my first choice, but it proved to train to slowly.
+overfit) and speed in training.  A Support Vector Machine was my first choice, but it proved too train to slowly.
 
 ## External Packages
 
