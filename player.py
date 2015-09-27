@@ -1,5 +1,5 @@
 import random
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 import numpy as np
 
 class Player:
@@ -117,7 +117,7 @@ class Player:
         in ordered to predict the outcome of any given action.
         """
 
-        self._regressor = DecisionTreeRegressor()
+        self._regressor = RandomForestRegressor()
 
         self._regressor.fit(self._features, self._labels)
 
