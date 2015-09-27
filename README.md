@@ -7,8 +7,8 @@ Experimental project in which No Limit Texas Holdem players evolve using machine
 
 This project is a rough prototype of a No Limit Texas Holdem Simulator, which involves players who learn iteratively
 using machine learning.  Fundamentally, the simulation consists of the Table object requesting actions from the
-Player object.  The player calculates the set of all possible actions given the current state of the game and 
-responds with an action. Before the first round of learning, players choose a random action.
+Player object.  The player returns an action from the set of all possible actions. Before the first round of learning, 
+players choose a random action.
 
 Some simplifications are made. For example, the set of all possible raises is reduced to a smaller set.  
 Logrithmically distributed amounts from the range of possible raise amounts are chosen.  This simplification is made
