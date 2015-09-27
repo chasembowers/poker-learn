@@ -17,7 +17,7 @@ for the purpose of speed.  In addition, players play with integer amounts of chi
 Most interestingly, players attempt to maximize the expected value of the return on any particular action.
 The preffered alternative would be that the players maximize their own uility. That is, that the players are risk-
 averse.  Because risk-aversion has not been implemented, players are prone to taking wildly large bets.  I plan to
-address this in the future.  Finally, some of the more intricated Holdem rules are excluded.
+address this in the future.  Finally, some of the more intricate Holdem rules are excluded.
 
 The machine learning portion of this project is bare bones.  Players generate a set of features corresponding to
 each game state that they receive and all of the actions they could take.  This feature set corresponds to a label of
