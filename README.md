@@ -34,9 +34,8 @@ sklearn - library which implements machine learning models
 
 deuces - package which evaluates rank of poker hands, included in this project
 
-## Examples
+## Example
 
-Training
 ```python
 **********************************************
            1/2 No Limit Holdem             
@@ -55,51 +54,6 @@ Beginning iteration 2 ...
 Complete. Training players ...
 Training complete.
 ```
-
-Playing
-```python
-Hand 2
-Player 1 dealt Qh and 8c
-Player 2 dealt 9h and Td
-Player 3 dealt 9s and Ts
-Player 4 dealt As and Kc
-Player 5 dealt 9d and Qs
-Player 6 dealt 3d and 6s
-
-Player 1 posts small blind of 1
-Player 2 posts big blind of 2
-Player 3 raises 2 to 4
-Player 4 raises 5 to 9
-Player 5 raises 10 to 19
-Player 6 raises 17 to 36
-Player 1 raises 35 to 71
-Player 2 raises 35 to 106
-Player 3 raises 35 to 141
-Player 4 raises 51 to 192
-Player 5 calls 173
-Player 6 calls 156
-Player 1 folds.
-Player 2 calls 86
-Player 3 calls 51
-
-['7c', '8h', 'Tc']
-Player 2 raises 2 to 2
-Player 3 raises 2 to 4
-Player 4 raises 2 to 6
-Player 5 raises all-in 2 to 8
-Player 6 all-in calls with 8
-Player 2 raises 317 to 325
-Player 3 all-in calls with 4
-Player 4 all-in calls with 2
-317 uncalled chips return to Player 2
-
-['7c', '8h', 'Tc', '5c']
-
-['7c', '8h', 'Tc', '5c', '6c']
-
-Player 4 wins 1071 from main pot
-```
-
 ## License
 
 Copyright (c) 2015 Chase Bowers
