@@ -1,7 +1,7 @@
 Machine Learning  in Texas Holdem
 ========
 
-Experimental project in which No Limit Texas Holdem agents evolve using machine learning
+Experimental project in which No Limit Texas Holdem players evolve using machine learning
 
 ## Description
 
