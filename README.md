@@ -36,6 +36,7 @@ deuces - package which evaluates rank of poker hands, included in this project
 
 ## Examples
 
+Training
 ```python
 **********************************************
            1/2 No Limit Holdem             
@@ -54,6 +55,8 @@ Beginning iteration 2 ...
 Complete. Training players ...
 Training complete.
 ```
+
+Playing
 ```python
 Hand 2
 Player 1 dealt Qh and 8c
