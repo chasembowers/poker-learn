@@ -19,7 +19,7 @@ The preffered alternative would be that the players maximize their own uility. T
 averse.  Because risk-aversion has not been implemented, players are prone to taking wildly large bets.  I plan to
 address this in the future.  Finally, some of the more intricate Holdem rules are excluded.
 
-Each time a player receives an game state, the player generates a set of features corresponding to that game state 
+Each time a player receives a game state, the player generates a set of features corresponding to that game state 
 and and the action the player has chosen.  These features are stored and later associated with a label.  The label 
 is calculated at the end of each hand and is the difference between the player's stack at the end of the hand and the 
 player stack size at the moment of the action.
@@ -31,7 +31,7 @@ the set of stored features to the set of stored labels. In order to predict the 
 function for its received game state and over the entire set of possible actions. The action which is evaluated to the
 maximum expected value is chosen.
 
-After experiment with various sophisticated machine learning models like support vector machines and random forests, I 
+After experimenting with various sophisticated machine learning models like support vector machines and random forests, I 
 have only had success with a simple multiple regression model. I suspect that this is because the sample space is 
 extremely noise; poker involves a lot of luck, and simpler models are more resistant to overfitting.
 
