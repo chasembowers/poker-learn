@@ -5,7 +5,7 @@ Experimental project in which No Limit Texas Holdem agents evolve using machine 
 
 ## Description
 
-This project is a rough first draft of a No Limit Texas Holdem Simulator, which involves players who learn iteratively
+This project is a rough prototype of a No Limit Texas Holdem Simulator, which involves players who learn iteratively
 using machine learning.  Fundamentally, the simulation consists of the Table object requesting actions from the
 Player object.  The player calculates the set of all possible actions given the current state of the game and 
 responds with an action. Before the first round of learning, players choose a random action.
@@ -19,14 +19,21 @@ The preffered alternative would be that the players maximize their own uility. T
 averse.  Because risk-aversion has not been implemented, players are prone to taking wildly large bets.  I plan to
 address this in the future.  Finally, some of the more intricate Holdem rules are excluded.
 
-The machine learning portion of this project is bare bones.  Players generate a set of features corresponding to
-each game state that they receive and all of the actions they could take.  This feature set corresponds to a label of
-the player's change in stack size from the moment of the action until the hand is completed.  Once the player is 
-trained, the player predicts the expected return on the set of all possible actions and chooses the action which 
-maximizes its return.  Equivalently, the player approximates a function from a set of features, generated from a 
-combination of a game state and an action, to its change in stack size.  This function is approximated using a 
-machine learning regressor.  I have chosen a Random Forest because of its robustness to noise (tendency not to 
-overfit) and speed in training.  A Support Vector Machine was my first choice, but it proved to train too slowly.
+Each time a player receives an game state, the player generates a set of features corresponding to that game state 
+and and the action the player has chosen.  These features are stored and later associated with a label.  The label 
+is calculated at the end of each hand and is the difference between the player's stack at the end of the hand and the 
+player stack size at the moment of the action.
+
+After each round, the player is trained using a fixed amount of features and labels.  The remainder of features and
+labels from the beginning of the player's career are discarded. This is implemented because the expected return of a
+player's action will change as a player evolves.  A machine learning regressor is used to approximate a function from
+the set of stored features to the set of stored labels. In order to predict the best action, the player evaluates this
+function for its received game state and over the entire set of possible actions. The action which is evaluated to the
+maximum expected value is chosen.
+
+After experiment with various sophisticated machine learning models like support vector machines and random forests, I 
+have only had success with a simple multiple regression model. I suspect that this is because the sample space is 
+extremely noise; poker involves a lot of luck, and simpler models are more resistant to overfitting.
 
 ## External Packages
 
@@ -56,7 +63,9 @@ Training complete.
 ```
 ## License
 
-Copyright (c) 2015 Chase Bowers
+The MIT License (MIT)
+
+Copyright (c) 2015 Chase M Bowers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -65,13 +74,13 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

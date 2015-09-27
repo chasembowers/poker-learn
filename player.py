@@ -1,6 +1,6 @@
 import random
-from sklearn.ensemble import RandomForestRegressor
 import numpy as np
+from sklearn.linear_model import LinearRegression
 
 class Player:
 
@@ -42,6 +42,9 @@ class Player:
         move = newStack - self._stack
         self._bankroll -= move
         self._stack += move
+
+        self._startingStack = self._stack
+
         return True
 
     def cashOut(self):
@@ -57,13 +60,13 @@ class Player:
 
         gameFeatures = self._genGameFeatures(gameState)
         allActions = self._allActions(gameState)  
+        self._stacks.append(self._stack)
 
         #if player has not yet been trained
         if not self._regressor: 
             action = random.choice(allActions)    #take a random action
             actionFeatures = self._genActionFeatures(action, gameState)  
             self._features.append(gameFeatures + actionFeatures)
-            self._stacks.append(self._stack)
             return action      
 
         else:
@@ -71,10 +74,10 @@ class Player:
             for a in allActions: allFeatures.append(gameFeatures + self._genActionFeatures(a, gameState))
             pReturn = self._regressor.predict(allFeatures)
             action = allActions[np.argmax(pReturn)]
+            if np.max(pReturn) <= 0: action = ('fold',)
 
             actionFeatures = self._genActionFeatures(action, gameState)  
             self._features.append(gameFeatures + actionFeatures)
-            self._stacks.append(self._stack)
             return action      
 
     def removeChips(self, amt):
@@ -108,7 +111,8 @@ class Player:
         self._stacks = self._stacks[-self._memory:]
         self._labels = self._labels[-self._memory:]
 
-        self._labels = self._stack - np.array(self._stacks)
+        for i in range(len(self._labels), len(self._features)):
+            self._labels.append(self._stack - self._stacks[i])
 
     def train(self):
 
@@ -116,9 +120,8 @@ class Player:
         This method trains the player's regressor using the set of gathered features and labels
         in ordered to predict the outcome of any given action.
         """
-
-        self._regressor = RandomForestRegressor()
-
+        
+        self._regressor = LinearRegression()
         self._regressor.fit(self._features, self._labels)
 
     def _allActions(self, gameState):
@@ -142,12 +145,13 @@ class Player:
             #generate logrithmically distributed integer raises
             start = np.log10(minRaise)
             end = np.log10(maxBet)
-            for r in np.logspace(start, end, self._rChoices): actions.append(('raise', int(r + .5)))
             
             if toCall == 0: actions.append(('check',))
             else: 
                 actions.append(('call',))
                 actions.append(('fold',))
+
+            for r in np.logspace(start, end, self._rChoices): actions.append(('raise', int(r + .5)))
         
         else:    #player only has enough chips to call or check
             if toCall == 0: actions.append(('check',))
@@ -164,7 +168,7 @@ class Player:
         action a player takes. 
         """
 
-        gameFeatures = 26 * [0]
+        gameFeatures = 27 * [-1]
 
         holeCards = sorted(self._cards)
         tableCards = sorted(gameState['cards'])
@@ -179,6 +183,8 @@ class Player:
         for i in range(numP):
             gameFeatures[i* 2 + 14] = gameState['bets'][(i - me)%numP]
             gameFeatures[i* 2 + 15] = gameState['currBets'][(i - me)%numP]
+
+        gameFeatures[26] = me
 
         return gameFeatures
 

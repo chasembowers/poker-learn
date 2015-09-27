@@ -97,7 +97,10 @@ class Table:
                                 'cards': [],                              
                                 
                                 #index of player who is currently acting in self._players
-                                'actor': None                             
+                                'actor': None,                             
+
+                                #number of raises this round by position of player
+                                'numRaises': [0 for p in self._players]
                               }    
 
                 #commence simulation
@@ -172,8 +175,10 @@ class Table:
 
         #post blinds
         self._s['currBets'][sbPos] += self._smallBlind
+        self._players[sbPos].postBlind(self._smallBlind)
         if self._vocal: print self._players[sbPos].getName(), 'posts small blind of', self._smallBlind
         self._s['currBets'][bbPos] += self._bigBlind
+        self._players[bbPos].postBlind(self._bigBlind)
         if self._vocal: print self._players[bbPos].getName(), 'posts big blind of', self._bigBlind
 
         self._openBetting()
@@ -233,6 +238,7 @@ class Table:
                 self._s['bets'][i] -= contribution
                 subPot += contribution
 
+
             #pay winners
             for w in winners:
                 winnings = int(float(subPot) / len(winners))
@@ -242,7 +248,7 @@ class Table:
                         print w.getName(), 'wins', winnings
                     else:   
                         if n == 0: print w.getName(), 'wins', winnings, 'from main pot'
-                        if n > 0: print w.getName(), 'wins', winnings, 'from side pot',
+                        if n > 0: print w.getName(), 'wins', winnings, 'from side pot'
 
                 n += 1
 
@@ -296,10 +302,11 @@ class Table:
 
         self._s['actor'] = None    #action has closed
         
-        #add bets of current round to bets and flush currBets
+        #add bets of current round to bets and flush currBets and numRaises
         for i in range(len(self._s['currBets'])): 
             self._s['bets'][i] += self._s['currBets'][i]    
-            self._s['currBets'][i]
+            self._s['currBets'][i] = 0
+            self._s['numRaises'][i] = 0
 
     def _parseAction(self, action):
 
@@ -343,6 +350,7 @@ class Table:
             self._s['minRaise'] = raiseTo + raiseBy    #player must raise by twice as much as last raise
             self._s['currBets'][actor] = raiseTo
             player.removeChips(raiseTo - currentBet)
+            self._s['numRaises'][actor] += 1
             allIn  = player.getStack() == 0
             if allIn: self._s['allIn'].append(actor)
             if self._vocal: 

@@ -12,6 +12,5 @@ if __name__ == '__main__':
         players.append(p)
     
     for p in players: t.addPlayer(p) 
-    t.play(1000, 30, vocal=False)
-
-    t.play(10, 1, vocal=True)    
+    t.play(1000, 10, vocal=False)
+    t.play(5,1,vocal=True)
