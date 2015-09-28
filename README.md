@@ -48,7 +48,7 @@ contribution to the pot. These features are stored and later associated with a l
 end of each hand and is the difference between the player's stack at the end of the hand and the player stack size at 
 the moment of the action.
 
-After each round, the player is trained using a fixed amount of features and labels.  The remainder of features and
+After each iteration, the player is trained using a fixed amount of features and labels.  The remainder of features and
 labels from the beginning of the player's career are discarded. This is implemented because the expected return of a
 player's action will change as a player evolves.  A machine learning regressor is used to approximate a function from
 the set of stored features to the set of stored labels. In order to predict the best action, the player evaluates this
