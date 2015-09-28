@@ -251,7 +251,7 @@ class Table:
                         if n == 0: print w.getName(), 'wins', winnings, 'from main pot'
                         if n > 0: print w.getName(), 'wins', winnings, 'from side pot'
 
-                n += 1
+            n += 1
 
     def _openBetting(self): 
 
