@@ -5,10 +5,10 @@ Experimental project in which No Limit Texas Holdem players evolve using machine
 
 ## Description
 
-This project is a rough prototype of a No Limit Texas Holdem Simulator, which involves players who learn iteratively
-using machine learning.  Fundamentally, the simulation consists of the Table object requesting actions from the
-Player object.  The player returns an action from the set of all possible actions. Before the first round of learning, 
-players choose a random action.  'main.py' contains an example of basic usage.
+This project is a rough prototype of a No Limit Texas Holdem Simulator, which involves players who play against each 
+other and learn iteratively using machine learning.  Fundamentally, the simulation consists of the Table object 
+requesting actions from the Player object.  The player returns an action from the set of all possible actions. Before 
+the first round of learning, players choose a random action.  'main.py' contains an example of basic usage.
 
 ```python
 t = Table(smallBlind=1, bigBlind=2, maxBuyIn=200)
