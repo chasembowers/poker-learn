@@ -139,29 +139,29 @@ class Player:
 
         actions = []    #set of all possible actions
 
-        if toCall >= self._stack:   #player does not have enough chips to call without all-in
+        if toCall > self._stack:   #player cannot match entire bet
             actions.append(('call',))
             actions.append(('fold',))
+            return actions
             
-        elif maxBet >= minRaise:    #player has enough chips to raise
-
-            #generate logrithmically distributed integer raises
-            start = np.log10(minRaise)
-            end = np.log10(maxBet)
-            
+        if maxBet < minRaise:    #player has enough chips to call but not to raise
             if toCall == 0: actions.append(('check',))
             else: 
                 actions.append(('call',))
                 actions.append(('fold',))
+            return actions
 
-            for r in np.logspace(start, end, self._rChoices): actions.append(('raise', int(r + .5)))
-        
-        else:    #player only has enough chips to call or check
-            if toCall == 0: actions.append(('check',))
-            else: 
-                actions.append(('call',))
-                actions.append(('fold',))
+        #player has enough chips to raise
+        if toCall == 0: actions.append(('check',))
+        else:
+            actions.append(('call',))
+            actions.append(('fold',))
 
+        #generate logrithmically distributed integer raises
+        start = np.log10(minRaise)
+        end = np.log10(maxBet)
+
+        for r in np.logspace(start, end, self._rChoices): actions.append(('raise', int(r + .5)))
         return actions
 
     def _genGameFeatures(self, gameState):
