@@ -49,7 +49,9 @@ sklearn - library which implements machine learning models
 
 deuces - package which evaluates rank of poker hands, included in this project
 
-## Example
+## Examples
+
+Training
 
 ```python
 **********************************************
@@ -69,6 +71,38 @@ Beginning iteration 2 ...
 Complete. Training players ...
 Training complete.
 ```
+
+Playing
+
+```python
+Hand 5
+Player 1 dealt 7d and 9d
+Player 2 dealt Jc and 7c
+Player 3 dealt 8h and Jh
+Player 4 dealt As and Qs
+Player 5 dealt 9c and Jd
+Player 6 dealt 6d and 5h
+
+Player 4 posts small blind of 1
+Player 5 posts big blind of 2
+Player 6 folds.
+Player 1 folds.
+Player 2 raises 2 to 4
+Player 3 raises all-in 396 to 400
+Player 4 all-in calls with 199
+Player 5 all-in calls with 198
+Player 2 folds.
+200 uncalled chips return to Player 3
+
+['Qd', '6h', '8d']
+
+['Qd', '6h', '8d', '4h']
+
+['Qd', '6h', '8d', '4h', 'Tc']
+
+Player 5 wins 604 from main pot
+```
+
 ## License
 
 The MIT License (MIT)

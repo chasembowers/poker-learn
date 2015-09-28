@@ -19,3 +19,12 @@ if __name__ == '__main__':
     
     #Simulate 5 hands and narrate the hands
     t.play(maxHands=5, iters=1, vocal=True)
+
+    #get samples from trained players
+    features = []
+    labels = []
+    for p in players:
+        features.extend(p.getFeatures())
+        labels.extend(p.getLabels())
+    features = np.array(features)
+    labels = np.array(labels)

@@ -127,6 +127,10 @@ class Player:
         self._regressor = LinearRegression()
         self._regressor.fit(self._features, self._labels)
 
+    def getFeatures(self): return self._features[:]
+
+    def getLabels(self): return self._labels[:]
+
     def _allActions(self, gameState):
         
         """ This method accepts the dictionary gameState and returns the set of all possible actions. """
