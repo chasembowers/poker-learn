@@ -3,7 +3,7 @@ from deuces import deuces
 class Card:
     
     _nEnum = {'T':10, 'J':11, 'Q':12, 'K':13, 'A':14}
-    _sEnum = {'c':0, 'd':1, 's':2, 'h':3}
+    _sEnum = {'c':0, 'd':1, 's':2, 'h':3}    #enumeration of card suits
 
     def __init__(self, numLet, suit):
 

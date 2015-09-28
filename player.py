@@ -34,16 +34,13 @@ class Player:
 
         if minBuyIn > self._bankroll + self._stack: return False    #player has gone bankrupt
 
-        if self._stack >= maxBuyIn: 
-            self._startingStack = self._stack
-            return True
+        if self._stack >= maxBuyIn: return True
 
+        #player tops off stack
         newStack = min(maxBuyIn, self._bankroll + self._stack)
         move = newStack - self._stack
         self._bankroll -= move
         self._stack += move
-
-        self._startingStack = self._stack
 
         return True
 
@@ -65,19 +62,25 @@ class Player:
         #if player has not yet been trained
         if not self._regressor: 
             action = random.choice(allActions)    #take a random action
+            
+            #store action features
             actionFeatures = self._genActionFeatures(action, gameState)  
             self._features.append(gameFeatures + actionFeatures)
+            
             return action      
 
         else:
+            #determine best action
             allFeatures = []
             for a in allActions: allFeatures.append(gameFeatures + self._genActionFeatures(a, gameState))
             pReturn = self._regressor.predict(allFeatures)
             action = allActions[np.argmax(pReturn)]
             if np.max(pReturn) <= 0: action = ('fold',)
 
+            #store action features
             actionFeatures = self._genActionFeatures(action, gameState)  
             self._features.append(gameFeatures + actionFeatures)
+            
             return action      
 
     def removeChips(self, amt):
@@ -173,17 +176,20 @@ class Player:
         holeCards = sorted(self._cards)
         tableCards = sorted(gameState['cards'])
 
+        #add number and suit of each card to features
         cards = holeCards + tableCards
         for i in range(len(cards)):
             gameFeatures[2 * i] = cards[i].getNumber()
             gameFeatures[2 * i + 1] = cards[i].getSuit(num=True)
 
+        #add contribution to pot and current round of each player to features
         me = gameState['actor']
         numP = gameState['numP']
         for i in range(numP):
             gameFeatures[i* 2 + 14] = gameState['bets'][(i - me)%numP]
             gameFeatures[i* 2 + 15] = gameState['currBets'][(i - me)%numP]
 
+        #add player position to features
         gameFeatures[26] = me
 
         return gameFeatures

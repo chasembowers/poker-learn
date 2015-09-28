@@ -159,7 +159,7 @@ class Table:
 
     def _preFlop(self):
 
-        """ This method simulates round of betting before flop. """
+        """ This method posts the blinds and commences betting. """
 
         self._s['minRaise'] = 2 * self._bigBlind    #minimum first raise before flop is 2 x Big Blind
 
@@ -192,12 +192,13 @@ class Table:
 
         self._s['minRaise'] = self._bigBlind    #minimum first bet after the flop is Big Blind
 
+        #flip numCards
         self._s['cards'] += self._deck[:numCards]
         if self._vocal: print [str(c) for c in self._s['cards']]
         self._deck = self._deck[numCards:]
+        
         self._s['actor'] = (self._dealer + 1) % self._s['numP']    #first actor is player after dealer
         
-        self._s['currBets'] = [0 for p in self._players]
         self._openBetting()
         if self._vocal: print
 
@@ -282,6 +283,7 @@ class Table:
 
             self._s['toCall'] = max(self._s['currBets']) - self._s['currBets'][actor]    #player must call maximum bet to call
 
+            #request player action and parse action
             action = self._players[actor].act(self._s)
             self._parseAction(action)
             if action[0] == 'raise': lastRaiser = actor
