@@ -59,7 +59,7 @@ maximum expected value of return is chosen.
 
 After experimenting with various sophisticated machine learning models like support vector machines and random forests, I 
 have only had success with a simple multiple regression model. I suspect that this is because the sample space is 
-extremely noise; poker involves a lot of luck, and simpler models are more resistant to overfitting.
+extremely noisy; poker involves a lot of luck, and simpler models are more resistant to overfitting.
 
 ## External Packages
 
