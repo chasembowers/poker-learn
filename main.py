@@ -15,7 +15,7 @@ if __name__ == '__main__':
     for p in players: t.addPlayer(p) 
 
     #Simulate 10 iterations of 1000 hands
-    t.play(maxHands=1000, iters=2, vocal=False)
+    t.play(maxHands=1000, iters=20, vocal=False)
     
     #Simulate 5 hands and narrate the hands
     t.play(maxHands=5, iters=1, vocal=True)
