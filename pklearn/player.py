@@ -148,6 +148,7 @@ class Player:
             return actions
 
         #add eligible raise choices to actions
+        #raise actions include a raise to amount, not a raise by amount
         for r in self._rChoices:
             amt = int(self._stack * r) 
             if amt >= minRaise and amt <= maxBet: actions.append(('raise', amt))
@@ -160,63 +161,9 @@ class Player:
         
         return actions
 
-    def _genGameFeatures(self, gameState):
+    def _genGameFeatures(self, gameState): raise Exception('This method must be implemented in an inherited class.')
 
-        """ 
-        This method generates a set of features from a gameState and independently of the
-        action a player takes. 
-        """
-
-        gameFeatures = 43 * [0]
-
-        holeCards = sorted(self._cards)
-        tableCards = sorted(gameState['cards'])
-
-        #add number and suit of each card to features
-        cards = holeCards + tableCards
-        for i in range(len(cards)):
-            gameFeatures[6 * i] = 1    #ith card exists
-            gameFeatures[6 * i + 1] = cards[i].getNumber()
-            suit = cards[i].getSuit()
-            
-            #create binary encoding for suit
-            gameFeatures[6 * i + 2] = suit == 'c' 
-            gameFeatures[6 * i + 3] = suit == 'd'
-            gameFeatures[6 * i + 4] = suit == 's'
-            gameFeatures[6 * i + 5] = suit == 'h'
-
-        #player stack size
-        gameFeatures[42] = self._stack
-
-        # #add contribution to pot and current round of each player to features
-        # me = gameState['actor']
-        # numP = gameState['numP']
-        # for i in range(numP):
-        #     gameFeatures[i* 2 + 14] = gameState['bets'][(i - me)%numP]
-        #     gameFeatures[i* 2 + 15] = gameState['currBets'][(i - me)%numP]
-
-        # #number of players not folded
-        # gameFeatures[28] = len(gameState['bets']) - len(gameState['folded'])
-
-        return gameFeatures
-
-    def _genActionFeatures(self, action, gameState):
-
-        """ This method generates a set of features from a player action. """
-
-        #create binary encoding for action type
-        actionFeatures = 6 * [0]
-
-        if action[0] == 'check': actionFeatures[0] = 1
-        elif action[0] == 'fold': actionFeatures[1] = 1
-        elif action[0] == 'call': actionFeatures[2] = 1
-        elif action[0] == 'raise' or action[0] == 'bet':
-            actionFeatures[3] = 1
-            actionFeatures[4] = action[1]
-            actionFeatures[5] = float(action[1]) / sum(gameState['bets'] + gameState['currBets'])    #proportion of raise to pot size
-        else: raise Exception('Invalid action.')
-
-        return actionFeatures
+    def _genActionFeatures(self, action, gameState): raise Exception('This method must be implemented in an inherited class.')
 
     def takeHoleCards(self, cards): self._cards = cards
 

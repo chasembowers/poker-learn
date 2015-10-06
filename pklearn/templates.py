@@ -1,4 +1,5 @@
 import time
+from player import Player
 
 def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=False):  
 
@@ -65,3 +66,54 @@ def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=Fa
 
     print 'Simulation complete.\n'
     return bankroll
+
+class BasicPlayer(Player):
+
+    def _genGameFeatures(self, gameState):
+
+        """ 
+        This method generates a set of features from a gameState and independently of the
+        action a player takes. 
+        """
+
+        gameFeatures = 43 * [0]
+
+        holeCards = sorted(self._cards)
+        tableCards = sorted(gameState['cards'])
+
+        #add number and suit of each card to features
+        cards = holeCards + tableCards
+        for i in range(len(cards)):
+            gameFeatures[6 * i] = 1    #ith card exists
+            gameFeatures[6 * i + 1] = cards[i].getNumber()
+            suit = cards[i].getSuit()
+            
+            #create binary encoding for suit
+            gameFeatures[6 * i + 2] = suit == 'c' 
+            gameFeatures[6 * i + 3] = suit == 'd'
+            gameFeatures[6 * i + 4] = suit == 's'
+            gameFeatures[6 * i + 5] = suit == 'h'
+
+        #player stack size
+        gameFeatures[42] = self._stack
+
+        return gameFeatures
+
+    def _genActionFeatures(self, action, gameState):
+
+        """ This method generates a set of features from a player action. """
+
+        #create binary encoding for action type
+        actionFeatures = 7 * [0]
+
+        if action[0] == 'check': actionFeatures[0] = 1
+        elif action[0] == 'fold': actionFeatures[1] = 1
+        elif action[0] == 'call': actionFeatures[2] = 1
+        elif action[0] == 'raise' or action[0] == 'bet':
+            actionFeatures[3] = 1
+            actionFeatures[4] = action[1]    #raise to amount
+            actionFeatures[5] = action[1] - max(gameState['currBets'])    #raise by amount
+            actionFeatures[6] = actionFeatures[5] / sum(gameState['bets'] + gameState['currBets'])    #proportion of raise by to pot size
+        else: raise Exception('Invalid action.')
+
+        return actionFeatures

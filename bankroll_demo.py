@@ -1,5 +1,5 @@
-from pklearn import Table, Player
-from pklearn.templates import simulate
+from pklearn import Table
+from pklearn.templates import simulate, BasicPlayer
 from sklearn.ensemble import GradientBoostingRegressor
 
 if __name__ == '__main__':
@@ -18,7 +18,7 @@ if __name__ == '__main__':
         #Player forgets training samples older than 100,000
         r = GradientBoostingRegressor()
         name = 'Player ' + str(i+1)
-        p = Player(name=name, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5, reg=r)
+        p = BasicPlayer(name=name, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5, reg=r)
         p.stopTraining()
         players.append(p)
 

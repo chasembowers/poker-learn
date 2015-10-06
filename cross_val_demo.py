@@ -1,5 +1,5 @@
-from pklearn import Table, Player
-from pklearn.templates import simulate
+from pklearn import Table
+from pklearn.templates import simulate, BasicPlayer
 import numpy as np
 
 from sklearn.cross_validation import cross_val_score
@@ -21,7 +21,7 @@ if __name__ == '__main__':
         #with each raise choice .7 times the next largest raise choice 
         #Player forgets training samples older than 100,000
         name = 'Player ' + str(i+1)
-        p = Player(name=name, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5)
+        p = BasicPlayer(name=name, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5)
         players.append(p)
 
     for p in players: t.addPlayer(p)
