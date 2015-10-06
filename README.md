@@ -7,9 +7,10 @@ Machine Learning in No Limit Texas Holdem
 
 This is a small library which allows for the simulation of No Limit Texas Holdem between autonomous players
 which are built around machine learning models.  pklearn is made specifically for use with the scikit-learn
-machine learning library, although any regressor which implements 'fit' and 'predict' methods will work.  
-Fundamentally, the Table object simulates a hand by sending game states and requesting actions from its Player
- objects.  Before the first round of learning, players choose a random action.  Several demo files are included.
+machine learning library, although any regressor which implements 'fit' and 'predict' methods will work. 
+Fundamentally, this library consists of the Table object simulating a hand by sending game states and requesting
+ actions from its Player objects.  Before the first round of learning, players choose a random action.  Several
+ demo files are included.
 
 In the simplest case, players are trained, and then test hands are narrated:
 
@@ -63,8 +64,7 @@ simulate(t, nHands=20, nBuyIn=10, vocal=True)
 
     Player 2 wins 118 from main pot
 
-Player's bankrolls over time are returned by the 'simulate' template function. Players that are trained more have
- a tendency to be more skilled:
+Players that are trained more have a tendency to be more skilled:
 
 bankroll_demo.py
 ```python
@@ -90,7 +90,7 @@ for i in range(6):
 plt.legend(loc='upper left')
 plt.show()
 ```
-
+Player 2's bankroll reflects that it has seen 10,000 more hands than Player 1. 
 ![alt tag](https://raw.githubusercontent.com/chasembowers/pklearn/master/bankroll.png)
 
 For the purpose of testing different regressors, a demo file is included which cross_validates
@@ -132,10 +132,10 @@ for r in regressors:
 ## Simplifications
 
 Some simplifications are made. For example, the set of all possible raises is reduced to a smaller set. This 
-decreases the number of actions for which a Player must predict return and, as a result, decreases the computational
+decreases the number of actions for which a Player must predict return and, as a result, decreases computational
 load. Specific raise amounts are chosen to represent a logrithmic distribution over a Player's stack.  The intuition behind
- this decision is that a player is exponentially less likely to choose linearly greater raise amounts. In addition, players
-play with integer amounts of chips of uniform value and there is no distinction made between betting and raising.
+ this decision is that a player is exponentially less likely to choose linearly greater raise amounts. In addition, Players
+play with integer amounts of chips of uniform value, and there is no distinction made between betting and raising.
 
 Most interestingly, players attempt to maximize the expected value of the return on any particular action.
 The prefered alternative would be that Players maximize their own uility. That is, that the players are risk-
@@ -154,8 +154,8 @@ This will be better supported in the future.
 
 After each iteration, the player is trained using a fixed amount of features and labels.  The remainder of features and
 labels from the beginning of the player's career are discarded. The reason for discarding is that the expected return of a
-Player's action  is a function of the Player's future actions in the hand, so it will change as a player evolves.  A machine
- learning regressor is used to approximate a function from the set of stored features to the set of stored labels. In order to
+Player's action  is a function of the Player's future actions in any hand, so older samples become inaccurate as a Player evolves. 
+A machine learning regressor is used to approximate a function from the set of stored features to the set of stored labels. In order to
  predict the best action, the player evaluates this function for its received game state and over the entire set of possible actions.
  The action which is evaluated to the maximum expected value of return is chosen.
 
@@ -165,8 +165,8 @@ it can lead to some strange and upredictable behavior
 
 ## Machine Learning Models
 
-After experimenting with various machine learning models, have had most success with linear models and ensemble models.
-I suspect that this is because both are resistant to overfitting the high amount of randomness that is present in poker.
+After experimenting with various machine learning models,  I have had most success with linear models and ensemble models.
+I suspect that this is because both are resistant to overfitting the large amount of randomness that is present in poker.
  Ensemble models work by fitting regressors to multiple random subsets of the training data.  In this way, they minimize overfitting
 while linear models avoid overfitting via their simplicity.  Ensemble methods seem to outperform linear methods.  This is likely
 because ensemble methods can capture the nonlinearities present in Holdem with regressors like decision trees.  As for specific
