@@ -90,7 +90,7 @@ for i in range(6):
 plt.legend(loc='upper left')
 plt.show()
 ```
-Player 2's bankroll reflects that it has seen 10,000 more hands than Player 1. 
+Player 2's bankroll reflects that it has trained over 10,000 more hands than Player 1. 
 ![alt tag](https://raw.githubusercontent.com/chasembowers/pklearn/master/bankroll.png)
 
 For the purpose of testing different regressors, a demo file is included which cross_validates
