@@ -3,7 +3,7 @@ from deuces import deuces
 class Card:
     
     _nEnum = {'T':10, 'J':11, 'Q':12, 'K':13, 'A':14}
-    _sEnum = {'c':0, 'd':1, 's':2, 'h':3}    #enumeration of card suits
+    _suits = ['c', 'd', 's', 'h']
 
     def __init__(self, numLet, suit):
 
@@ -19,7 +19,7 @@ class Card:
             self._numLet = numLet.upper()
         else: raise Exception('Card number/letter must be number or string.')
 
-        if suit.lower() not in self._sEnum: raise Exception("Invalid suit. Valid suits are \'c\', \'d\', \'s\', and \'h\'.")
+        if suit.lower() not in self._suits: raise Exception("Invalid suit. Valid suits are \'c\', \'d\', \'s\', and \'h\'.")
         self._suit = suit.lower()
 
     def __str__(self): return str(self._numLet) + self._suit
@@ -33,9 +33,7 @@ class Card:
         if self._numLet in self._nEnum: return self._nEnum[self._numLet]
         return self._numLet
 
-    def getSuit(self, num=False): 
-        if not num: return self._suit
-        return self._sEnum[self._suit]
+    def getSuit(self): return self._suit
 
     def __lt__(self, other): return self.getNumber() < other.getNumber()
         

@@ -2,7 +2,6 @@ from player import Player
 from random import shuffle
 from card import Card
 from deuces.deuces import Evaluator
-import time
 
 class Table:    
 
@@ -16,9 +15,10 @@ class Table:
 
         """ Constructor accepts  blinds and maximum table buy in as integers. """
         
-        self._players = []
+        self._players = []  #players at the table
+        self._playing = []  #players who are not bankrupt
         self._sitOut = []   #players who have gone bankrupt
-        self._dealer = 0    #position of dealer in self._players
+        self._dealer = 0    #position of dealer in self._playing
         self._eval = Evaluator()
 
         if type(smallBlind) != int or type(bigBlind) != int or type(maxBuyIn) != int:
@@ -29,115 +29,93 @@ class Table:
 
     def addPlayer(self, player):
 
+        self._sitOut.append(player)
         self._players.append(player)
 
-    def play(self, maxHands, iters, vocal=False):
+    def playHand(self, vocal=False):
 
+        """ 
+        This method simulations one hand between added players. Narrates hand if vocal is True.
+        Returns False if unable to play hand. 
         """
-        This method simulations 'iters' iterations where each iteration terminates when 'maxHands' are reached
-        or all players but one have gone bankrupt.  Players cash out and train after each iteration.  Narrates 
-        hands when vocal is 'True'.
-        """
-        
-        print '**********************************************'
-        print '            {}/{} No Limit Holdem             '.format(self._smallBlind, self._bigBlind)
-        print '**********************************************'
-        print 'Maximum hands:', maxHands
-        print 'Iterations:', iters
-        print
 
         self._vocal = vocal
 
-        for i in range(iters):
+        #add players to hand who are eligible to play
+        for p in self._sitOut[:]:
+            if p.getStack() >= self._bigBlind:
+                if p.getStack() > self._maxBuyIn: 
+                    raise Exception('Player\'s stack is greater than maximum buy in.')
+                self._playing.append(p)
+                self._sitOut.remove(p)
 
-            print 'Beginning iteration', i+1, '...'
-            if i == 0: print '(Untrained players are taking random actions.)'
+        if len(self._playing) <= 1: return False
+            
+        #reset table game state before hand
+        self._s = {
+                        #amount of chips necessary to call without going all-in
+                        'toCall': None,                           
+                        
+                        #minimum raise size, player must increase bet to minRaise to raise
+                        'minRaise': None,                         
+                        
+                        #number of players in hand
+                        'numP': len(self._playing),               
+                        
+                        #total contribution of each player to completed betting rounds
+                        #by position of player in self._playing  
+                        #sum of bets is total pot excluding current betting round
+                        'bets': [0 for p in self._playing],       
+                        
+                        #total contribution of each player to pot of current betting round
+                        #sum of currBets is total pot of current round
+                        #sum of bets and currBets is total pot
+                        'currBets': [0 for p in self._playing],   
+                        
+                        #list of positions where players have folded
+                        'folded': [],
+                        
+                        #list of positions where players are all-in
+                        'allIn': [],                                    
+                        
+                        #face up community cards
+                        'cards': [],                              
+                        
+                        #index of player who is currently acting in self._playing
+                        'actor': None,                             
 
-            for p in self._players: p.buyIn(self._bigBlind, self._maxBuyIn)
+                        #number of raises this round by position of player
+                        'numRaises': [0 for p in self._playing]
+                      }    
 
-            t = 0
-            last = time.time()
-            while len(self._players) > 1 and t < maxHands:
-                
-                t += 1
-                if time.time() - last > 5:
-                    last = time.time()
-                    print t, 'hands simulated.'
+        #commence simulation
+        self._generateDeck()
+        self._dealHoleCards()
+        self._preFlop()
+        self._flip(3)
+        self._flip(1)
+        self._flip(1)
+        self._payWinners()
+        for p in self._playing: p.endHand()
 
-                if vocal: print 'Hand', t
-                
-                #reset table game state before next hand
-                self._s = {
-                                #amount of chips necessary to call without going all-in
-                                'toCall': None,                           
-                                
-                                #minimum raise size, player must increase bet to minRaise to raise
-                                'minRaise': None,                         
-                                
-                                #number of players in hand
-                                'numP': len(self._players),               
-                                
-                                #total contribution of each player to completed betting rounds
-                                #by position of player in self._players  
-                                #sum of bets is total pot excluding current betting round
-                                'bets': [0 for p in self._players],       
-                                
-                                #total contribution of each player to pot of current betting round
-                                #sum of currBets is total pot of current round
-                                #sum of bets and currBets is total pot
-                                'currBets': [0 for p in self._players],   
-                                
-                                #list of positions where players have folded
-                                'folded': [],
-                                
-                                #list of positions where players are all-in
-                                'allIn': [],                                    
-                                
-                                #face up community cards
-                                'cards': [],                              
-                                
-                                #index of player who is currently acting in self._players
-                                'actor': None,                             
+        #find next dealer
+        dealerPos = (self._dealer + 1) % self._s['numP']
+        while self._playing[dealerPos].getStack() < self._bigBlind: 
+            dealerPos = (dealerPos + 1) % self._s['numP']
+        dealer = self._playing[dealerPos]
 
-                                #number of raises this round by position of player
-                                'numRaises': [0 for p in self._players]
-                              }    
+        #remove players who have gone bankrupt
+        for p in self._playing[:]:
+            if p.getStack() < self._bigBlind:
+                self._playing.remove(p)
+                self._sitOut.append(p)
 
-                #commence simulation
-                self._generateDeck()
-                self._dealHoleCards()
-                self._preFlop()
-                self._flip(3)
-                self._flip(1)
-                self._flip(1)
-                self._payWinners()
-                for p in self._players: p.endHand()
+        #move dealer chip 
+        self._dealer = 0
+        while self._playing[self._dealer] != dealer: self._dealer = (self._dealer + 1) % self._s['numP']
 
-                #find next dealer
-                dealerPos = (self._dealer + 1) % self._s['numP']
-                while not self._players[dealerPos].buyIn(self._bigBlind, self._maxBuyIn): 
-                    dealerPos = (dealerPos + 1) % self._s['numP']
-                dealer = self._players[dealerPos]
-
-                #remove players who have gone bankrupt
-                removePlayers = []
-                for p in self._players:
-                    if not p.buyIn(self._bigBlind, self._maxBuyIn): 
-                        self._sitOut.append(p)
-                        removePlayers.append(p)
-                for p in removePlayers: self._players.remove(p)
-
-                #move dealer chip 
-                self._dealer = 0
-                while self._players[self._dealer] != dealer: self._dealer = (self._dealer + 1) % self._s['numP']
-
-                if vocal: print
-
-            for p in self._players: p.cashOut()
-
-            print 'Complete. Training players ...'
-            for p in self._players: p.train()
-            print 'Training complete.\n'
+        if vocal: print
+        return True
 
     def _generateDeck(self):
 
@@ -151,9 +129,9 @@ class Table:
 
         """ This method gives each player their starting cards at the beginning of the hand. """
 
-        for p in self._players:
+        for p in self._playing:
             p.takeHoleCards((self._deck[0],self._deck[1]))
-            if self._vocal: print p.getName(), 'dealt', self._deck[0], 'and', self._deck[1]
+            if self._vocal: print p.getName() + '(' + str(p.getStack()) + ')', 'dealt', self._deck[0], 'and', self._deck[1]
             self._deck = self._deck[2:]
         if self._vocal: print
 
@@ -175,11 +153,11 @@ class Table:
 
         #post blinds
         self._s['currBets'][sbPos] += self._smallBlind
-        self._players[sbPos].postBlind(self._smallBlind)
-        if self._vocal: print self._players[sbPos].getName(), 'posts small blind of', self._smallBlind
+        self._playing[sbPos].removeChips(self._smallBlind)
+        if self._vocal: print self._playing[sbPos].getName(), 'posts small blind of', self._smallBlind
         self._s['currBets'][bbPos] += self._bigBlind
-        self._players[bbPos].postBlind(self._bigBlind)
-        if self._vocal: print self._players[bbPos].getName(), 'posts big blind of', self._bigBlind
+        self._playing[bbPos].removeChips(self._bigBlind)
+        if self._vocal: print self._playing[bbPos].getName(), 'posts big blind of', self._bigBlind
 
         self._openBetting()
         if self._vocal: print
@@ -210,7 +188,7 @@ class Table:
         
         #evaluate rank of hand for each player
         ranks = {}
-        for p in self._players:
+        for p in self._playing:
             if not board: rank = -1    #all players but one have folded before flop
             else: rank = self._eval.evaluate(board, [p.show()[0].toInt(), p.show()[1].toInt()])
             ranks[p] = rank
@@ -226,7 +204,7 @@ class Table:
                 if not i in self._s['folded'] and self._s['bets'][i] != 0:    #if player hasnt folded and has stake in current sub pot
                     if minLiveBet == None: minLiveBet = self._s['bets'][i]
                     else: minLiveBet = min(minLiveBet, self._s['bets'][i])
-                    player = self._players[i]
+                    player = self._playing[i]
                     eligibleWinners.append(player)
                     if minRank == None: minRank = ranks[player]
                     else: minRank = min(minRank, ranks[player])
@@ -241,15 +219,27 @@ class Table:
 
 
             #pay winners
+            winnings = int(float(subPot) / len(winners))
             for w in winners:
-                winnings = int(float(subPot) / len(winners))
                 w.addChips(winnings)
+                subPot -= winnings
                 if self._vocal:
                     if minRank == -1:    #everyone else folded
                         print w.getName(), 'wins', winnings
                     else:   
                         if n == 0: print w.getName(), 'wins', winnings, 'from main pot'
                         if n > 0: print w.getName(), 'wins', winnings, 'from side pot'
+
+            #give odd chips to player in earliest position
+            if subPot > 0:
+                actor = (self._dealer + 1) % self._s['numP']
+                while subPot > 0:
+                    player = self._playing[actor]
+                    if player in winners:
+                        player.addChips(subPot)
+                        if self._vocal: print player.getName(), 'wins', subPot, 'odd chips'
+                        subPot = 0
+                    actor = (actor + 1) % self._s['numP']
 
             n += 1
 
@@ -284,7 +274,7 @@ class Table:
             self._s['toCall'] = max(self._s['currBets']) - self._s['currBets'][actor]    #player must call maximum bet to call
 
             #request player action and parse action
-            action = self._players[actor].act(self._s)
+            action = self._playing[actor].act(self._s)
             self._parseAction(action)
             if action[0] == 'raise': lastRaiser = actor
             
@@ -298,7 +288,7 @@ class Table:
             for i in range(self._s['numP']):
                 if self._s['currBets'][i] == maxBet:
                     self._s['currBets'][i] = belowMax
-                    player = self._players[i]
+                    player = self._playing[i]
                     player.addChips(maxBet - belowMax)
                     if self._vocal: print maxBet - belowMax, 'uncalled chips return to', player.getName() 
 
@@ -317,7 +307,7 @@ class Table:
         the game state, self._s, appropriately.
         """
         actor = self._s['actor']
-        player = self._players[actor]
+        player = self._playing[actor]
         m = max(self._s['currBets'])    #largest contribution that any player has in current pot
         currentBet = self._s['currBets'][actor]
 
@@ -360,3 +350,11 @@ class Table:
                 else: print player.getName(), 'raises all-in', raiseBy, 'to', raiseTo
         
         else: raise Exception('Invalid player action.')
+
+    def getPlaying(self): return self._playing[:]
+
+    def getSitOut(self): return self._sitOut[:]
+
+    def getPlayers(self): return self._players[:]
+
+    def getParams(self): return (self._smallBlind, self._bigBlind, self._maxBuyIn)
