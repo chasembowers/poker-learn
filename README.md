@@ -93,7 +93,7 @@ plt.show()
 Player 2's bankroll reflects that it has trained over 10,000 more hands than Player 1. 
 ![alt tag](https://raw.githubusercontent.com/chasembowers/pklearn/master/bankroll.png)
 
-For the purpose of testing different regressors, a demo file is included which cross_validates
+For the purpose of testing different regressors, a demo file is included which cross-validates
 several regressors with features and labels taken from Players.
 
 cross_val_demo.py
@@ -138,8 +138,8 @@ load. Specific raise amounts are chosen to represent a logrithmic distribution o
 play with integer amounts of chips of uniform value, and there is no distinction made between betting and raising.
 
 Most interestingly, players attempt to maximize the expected value of the return on any particular action.
-The prefered alternative would be that Players maximize their own uility. That is, that the players are risk-
-averse.  Because risk-aversion has not been implemented, players are prone to taking wildly large bets.  I plan to
+The prefered alternative would be that Players maximize their own uility. That is, that the players are risk-averse.  
+Because risk-aversion has not been implemented, players are prone to taking wildly large bets.  I plan to
 address this in the future.  Finally, some of the more intricate Holdem rules are excluded.
 
 ## Features and Labels
