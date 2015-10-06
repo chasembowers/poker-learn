@@ -91,6 +91,8 @@ plt.legend(loc='upper left')
 plt.show()
 ```
 
+![alt tag](https://raw.githubusercontent.com/chasembowers/pklearn/master/bankroll.png)
+
 For the purpose of testing different regressors, a demo file is included which cross_validates
 several regressors with features and labels taken from Players.
 
