@@ -8,7 +8,7 @@ class Table:
 
     """
     This class is primarily responsible for core holdem simulation logic. Basic usage consists of 
-    adding players via addPlayer() and simulating via play(). For simplicity, betting takes place
+    adding players via addPlayer() and simulating a single hand via playhand(). For simplicity, betting takes place
     with integer number of chips with uniform value.
     """
 
@@ -36,7 +36,7 @@ class Table:
     def playHand(self, vocal=False):
 
         """ 
-        This method simulations one hand between added players. Narrates hand if vocal is True.
+        This method simulates one hand between added players. Narrates hand if vocal is True.
         Returns False if unable to play hand. 
         """
 
@@ -271,7 +271,7 @@ class Table:
 
         """ 
         This method accepts a tuple of the form (action string, amount) or (action string,) and changes
-        the game state, self._s, appropriately.
+        the GameState, self._s, appropriately.
         """
         actor = self._s.actor
         player = self._playing[actor]

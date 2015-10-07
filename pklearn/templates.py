@@ -4,6 +4,8 @@ from player import Player
 def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=False):  
 
     """
+    This function simulates several hands of Holdem according to these parameters:
+
     Parameters:
     table - table used in simulation (Table)
     nHands - total number of hands to simulate (int)
@@ -17,9 +19,10 @@ def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=Fa
     print 'Beginning simulation of', nHands, 'hands.'
 
     players = table.getPlayers()
-    bankroll = [[] for p in players]
+    bankroll = [[] for p in players]    #holds bankroll history of all players
     maxBuyIn = table.getParams()[-1]
 
+    #set Player stack sizes to max buy-in or less
     for p in players: 
         p.cashOut()
         if p.getStack() < maxBuyIn: p.buyChips(maxBuyIn)
@@ -51,12 +54,14 @@ def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=Fa
         if vocal: print 'Hand', hand
         played = table.playHand(vocal=vocal)
         
+        #Hand failure
         if not played:    
             if nextBuyIn == hand + nBuyIn:    #if players just bought in
                 print 'All or all but one players are bankrupt.'
                 break
-            if vocal: print 'Not enough eligible players.'
+
             #buy in and redo hand
+            if vocal: print 'Not enough eligible players.'
             nextBuyIn = hand    
             hand -= 1
         

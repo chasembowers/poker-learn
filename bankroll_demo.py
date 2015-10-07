@@ -12,13 +12,13 @@ if __name__ == '__main__':
     players = []
     for i in range(6):
         
-        #create Player that uses GradientBoostingRegressor as machine learning model
+        #create BasicPlayer that uses GradientBoostingRegressor as machine learning model
         #with wealth of 1 million and 10 discrete choices for raising,
         #with each raise choice .7 times the next largest raise choice
         #Player forgets training samples older than 100,000
         r = GradientBoostingRegressor()
         name = 'Player ' + str(i+1)
-        p = BasicPlayer(name=name, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5, reg=r)
+        p = BasicPlayer(name=name, reg=r, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5)
         p.stopTraining()
         players.append(p)
 

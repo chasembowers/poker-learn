@@ -9,7 +9,7 @@ if __name__ == '__main__':
     players = []
     for i in range(6):
         
-        #create Player that uses GradientBoostingRegressor as machine learning model
+        #create BasicPlayer that uses GradientBoostingRegressor as machine learning model
         #with wealth of 1 million and 10 discrete choices for raising,
         #with each raise choice .7 times the next largest raise choice
         #Player forgets training samples older than 100,000
