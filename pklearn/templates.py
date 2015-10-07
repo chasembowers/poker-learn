@@ -63,11 +63,10 @@ def simulate(table, nHands, firstTrain=0, nTrain=0, nBuyIn=0, tPrint=5, vocal=Fa
             #buy in and redo hand
             if vocal: print 'Not enough eligible players.'
             nextBuyIn = hand    
-            hand -= 1
         
-        hand += 1
-
-        for i in range(len(players)): bankroll[i].append(players[i].getBankroll())
+        else:
+            hand += 1
+            for i in range(len(players)): bankroll[i].append(players[i].getBankroll())
 
     print 'Simulation complete.\n'
     return bankroll
