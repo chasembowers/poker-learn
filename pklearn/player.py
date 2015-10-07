@@ -127,10 +127,10 @@ class Player:
         
         """ This method accepts the dictionary gameState and returns the set of all possible actions. """
 
-        toCall = gameState['toCall']    #amount necessary to call
-        minRaise = gameState['minRaise']    #new total bet amount necessary to raise
-        currentBets = gameState['currBets']
-        myCurrentBet = currentBets[gameState['actor']]
+        toCall = gameState.toCall    #amount necessary to call
+        minRaise = gameState.minRaise    #new total bet amount necessary to raise
+        currentBets = gameState.currBets
+        myCurrentBet = currentBets[gameState.actor]
         maxBet = self._stack + myCurrentBet    #maximum bet player could have in pot, including chips already in pot
 
         actions = []    #set of all possible actions

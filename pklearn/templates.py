@@ -79,7 +79,7 @@ class BasicPlayer(Player):
         gameFeatures = 43 * [0]
 
         holeCards = sorted(self._cards)
-        tableCards = sorted(gameState['cards'])
+        tableCards = sorted(gameState.cards)
 
         #add number and suit of each card to features
         cards = holeCards + tableCards
@@ -112,8 +112,8 @@ class BasicPlayer(Player):
         elif action[0] == 'raise' or action[0] == 'bet':
             actionFeatures[3] = 1
             actionFeatures[4] = action[1]    #raise to amount
-            actionFeatures[5] = action[1] - max(gameState['currBets'])    #raise by amount
-            actionFeatures[6] = actionFeatures[5] / sum(gameState['bets'] + gameState['currBets'])    #proportion of raise by to pot size
+            actionFeatures[5] = action[1] - max(gameState.currBets)    #raise by amount
+            actionFeatures[6] = actionFeatures[5] / sum(gameState.bets + gameState.currBets)    #proportion of raise by to pot size
         else: raise Exception('Invalid action.')
 
         return actionFeatures
