@@ -21,7 +21,7 @@ matplotlib - graphing library, necessary for running demo
 
 Some simplifications are made. For example, the set of all possible raises is reduced to a smaller set. This decreases the number of actions for which a Player must predict return and, as a result, decreases computational load. Specific raise amounts are chosen to represent a logrithmic distribution over a Player's stack.  The intuition behind this decision is that a Player becomes exponentially less likely to choose a raise amount as the amount increases. In addition, Players play with integer amounts of chips of uniform value, and there is no distinction made between betting and raising.
 
-Most interestingly, Players attempt to maximize the expected value of the return on any particular action. The preferred alternative would be that Players maximize their own uility. That is, that the Players are risk-averse. Because risk-aversion has not been implemented, Players are prone to taking wildly large bets. I plan to address this in the future. Finally, some of the more intricate Holdem rules are excluded.
+Most interestingly, Players attempt to maximize the expected value of the return on any particular action. The preferred alternative would be that Players maximize their own expected utility. That is, that the Players are risk-averse. Because risk-aversion has not been implemented, Players are prone to taking wildly large bets. I plan to address this in the future. Finally, some of the more intricate Holdem rules are excluded.
 
 ## Features and Labels
 
