@@ -6,7 +6,7 @@ class Player:
 
     """
     This class keeps a player's current stack size and bankroll and is primarily responsible for
-    receiving gameStates and returning actions.
+    receiving GameStates and returning actions.
     """
 
     def __init__(self, name, bankroll, nRaises, memory, rFactor=None, reg=None):
@@ -19,6 +19,7 @@ class Player:
         nRaises - number of raise choices player has, all-in always included (int)
         memory - player forgets oldest stored features/labels that exceed memory in quantity (int)
         rFactor - each raise choice is rFactor times the next largest raise choice (float)
+        reg - machine learning regressor, must be sklearn or implement 'fit' and 'predict'
         """
         
         self._name = name            #for distinction from other players
