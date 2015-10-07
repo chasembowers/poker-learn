@@ -22,10 +22,6 @@ class Card:
         if suit.lower() not in self.suits: raise Exception("Invalid suit. Valid suits are \'c\', \'d\', \'s\', and \'h\'.")
         self._suit = suit.lower()
 
-    def __str__(self): return str(self._numLet) + self._suit
-
-    def toInt(self): return deuces.Card.new(str(self)) #returns int compatible with deuces library
-
     def getNumber(self):
         
         """ This method returns number of card. It converts letter to number if necesary. """
@@ -36,6 +32,10 @@ class Card:
     def getSuit(self): return self._suit
 
     def __lt__(self, other): return self.getNumber() < other.getNumber()
+
+    def __str__(self): return str(self._numLet) + self._suit
+
+    def toInt(self): return deuces.Card.new(str(self)) #returns int compatible with deuces library
         
 
 
