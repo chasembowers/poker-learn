@@ -31,11 +31,12 @@ class Card:
 
     def getSuit(self): return self._suit
 
+    def toInt(self): return deuces.Card.new(str(self)) #returns int compatible with deuces library
+
     def __lt__(self, other): return self.getNumber() < other.getNumber()
 
     def __str__(self): return str(self._numLet) + self._suit
 
-    def toInt(self): return deuces.Card.new(str(self)) #returns int compatible with deuces library
         
 
 
