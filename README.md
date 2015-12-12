@@ -5,7 +5,7 @@ Machine Learning in No Limit Texas Holdem
 
 ## Description
 
-This is a small library which allows for the simulation of No Limit Texas Holdem between autonomous players which are built around machine learning models.  pklearn is made specifically for use with the scikit-learn machine learning library, although any regressor which implements 'fit' and 'predict' methods will work. Fundamentally, this library consists of the Table object simulating a hand by sending GameState objects and requesting actions from its Player objects.  Before the first round of learning, Players choose a random action.  Several demo files are included.
+This is a small library which allows for the simulation of No Limit Texas Holdem between autonomous players which are built around machine learning models.  poker-learn is made specifically for use with the scikit-learn machine learning library, although any regressor which implements 'fit' and 'predict' methods will work. Fundamentally, this library consists of the Table object simulating a hand by sending GameState objects and requesting actions from its Player objects.  Before the first round of learning, Players choose a random action.  Several demo files are included.
 
 ## External Packages
 
