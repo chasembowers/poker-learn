@@ -1,4 +1,4 @@
-pklearn
+poker-learn
 ========
 
 Machine Learning in No Limit Texas Holdem
