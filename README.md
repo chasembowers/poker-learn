@@ -17,16 +17,6 @@ simulate(t, nHands=10000, firstTrain=2000, nTrain=1000, nBuyIn=10)
 simulate(t, nHands=20, nBuyIn=10, vocal=True)
 ```
 
-    Hand 5
-    Player 2(1141) dealt 8d and Qs
-    Player 4(59) dealt 6c and As
-
-    Player 2 posts small blind of 1
-    Player 4 posts big blind of 2
-    Player 2 calls 1
-    Player 4 raises 11 to 13
-    Player 2 calls 11
-
     ['3h', 'Kc', '5c']
     Player 4 checks.
     Player 2 raises 270 to 270
