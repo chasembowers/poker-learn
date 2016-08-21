@@ -3,6 +3,55 @@ poker-learn
 
 Machine Learning in No Limit Texas Holdem
 
+```python
+t = Table(smallBlind=1, bigBlind=2, maxBuyIn=200)
+
+Players = []
+for i in range(6):
+    
+    #create BasicPlayer that uses GradientBoostingRegressor as machine learning model
+    #with wealth of 1 million and 10 discrete choices for raising,
+    #with each raise choice .7 times the next largest raise choice
+    #Player forgets training samples older than 100,000
+    r = GradientBoostingRegressor()
+    name = 'Player ' + str(i+1)
+    p = BasicPlayer(name=name, reg=r, bankroll=10**6, nRaises=10, rFactor=.7, memory=10**5)
+    Players.append(p)
+
+for p in Players: t.addPlayer(p)
+
+#simulate 'nHands' hands
+#begin training after 'firstTrain' hands
+#before which Players take random actions and explore state space
+#Players train every 'nTrain' hands after 'firstTrain'
+#Players cash out/ buy in every 'nBuyIn' hands
+#table narrates each hands if 'vocal' is True
+simulate(t, nHands=10000, firstTrain=2000, nTrain=1000, nBuyIn=10)
+simulate(t, nHands=20, nBuyIn=10, vocal=True)
+```
+
+    Hand 5
+    Player 2(1141) dealt 8d and Qs
+    Player 4(59) dealt 6c and As
+
+    Player 2 posts small blind of 1
+    Player 4 posts big blind of 2
+    Player 2 calls 1
+    Player 4 raises 11 to 13
+    Player 2 calls 11
+
+    ['3h', 'Kc', '5c']
+    Player 4 checks.
+    Player 2 raises 270 to 270
+    Player 4 all-in calls with 46
+    224 uncalled chips return to Player 2
+
+    ['3h', 'Kc', '5c', 'Qd']
+
+    ['3h', 'Kc', '5c', 'Qd', '8s']
+
+    Player 2 wins 118 from main pot
+
 ## Description
 
 This is a small library which allows for the simulation of No Limit Texas Holdem between autonomous players which are built around machine learning models.  poker-learn is made specifically for use with the scikit-learn machine learning library, although any regressor which implements 'fit' and 'predict' methods will work. Fundamentally, this library consists of the Table object simulating a hand by sending GameState objects and requesting actions from its Player objects.  Before the first round of learning, Players choose a random action.  Several demo files are included.
